@@ -1,0 +1,283 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sobre a Equipe - Galeria de JoJo</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #63465A;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            color: #fff;
+        }
+        
+        header {
+            background-color: #4A3343;
+            color: white;
+            padding: 18px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 100;
+            border-bottom: 3px solid #E0BBE4;
+        }
+        
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 80px;
+            width: auto;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+            transition: transform 0.3s ease;
+        }
+        
+        .logo img:hover {
+            transform: scale(1.05);
+        }
+        
+        .logo-text {
+            margin-left: 15px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            font-family: 'Bebas Neue', cursive;
+            color: #E0BBE4;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 2px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        nav ul li {
+            margin: 0 15px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        nav ul li a:hover,
+        nav ul li a.active {
+            background-color: #E0BBE4;
+            color: #4A3343;
+            box-shadow: 0 0 10px rgba(224, 187, 228, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .page-title {
+            text-align: center;
+            margin: 40px 0;
+            color: #E0BBE4;
+            font-size: 2.8rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            font-family: 'Bebas Neue', cursive;
+            letter-spacing: 3px;
+        }
+        
+        .sobre-container {
+            max-width: 900px;
+            margin: 40px auto;
+            padding: 30px;
+            background-color: rgba(74, 51, 67, 0.8);
+            border-radius: 15px;
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.3);
+            color: #f0f0f0;
+            line-height: 1.7;
+        }
+
+        .equipe-membro {
+            display: flex;
+            align-items: flex-start;
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.05);
+            border-radius: 10px;
+        }
+        
+        .equipe-membro:last-child {
+            margin-bottom: 0;
+        }
+
+        .membro-info {
+            margin-left: 20px;
+        }
+
+        .membro-nome {
+            font-family: 'Bebas Neue', cursive;
+            font-size: 2rem;
+            color: #E0BBE4;
+            margin-bottom: 10px;
+            letter-spacing: 1px;
+        }
+
+        .membro-curso {
+            font-style: italic;
+            margin-bottom: 15px;
+            color: #d3d3d3;
+        }
+
+        .membro-habilidades {
+            margin-top: 15px;
+        }
+        
+        .membro-habilidades h4 {
+            font-size: 1.1rem;
+            color: #E0BBE4;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+        
+        .membro-habilidades ul {
+            list-style: disc;
+            margin-left: 20px;
+            padding-left: 0;
+        }
+        
+        .membro-habilidades li {
+            margin-bottom: 5px;
+        }
+
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                padding: 10px;
+            }
+            
+            .logo img {
+                height: 60px;
+            }
+            
+            .logo-text {
+                font-size: 1.5rem;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 5px;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+                margin: 20px 0;
+            }
+            
+            .sobre-container {
+                margin: 20px;
+                padding: 20px;
+            }
+            
+            .equipe-membro {
+                flex-direction: column;
+                align-items: center;
+                text-align: center;
+            }
+            
+            .membro-info {
+                margin-left: 0;
+                margin-top: 20px;
+            }
+            
+            .membro-habilidades ul {
+                margin-left: 0;
+                padding-left: 20px;
+                text-align: left;
+            }
+        }
+    </style>
+</head>
+<body>    
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="{% static 'img/jojo.png' %}" alt="JoJo's Bizarre Adventure Logo">
+                <div class="logo-text">JoJo's Bizarre Gallery</div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'index' %}">Home</a></li>
+                    <li><a href="{% url 'sobre_equipe' %}" class="active">Sobre</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <h1 class="page-title">Sobre a Equipe</h1>
+    
+    <div class="sobre-container">
+        <p style="text-align: center; margin-bottom: 30px; font-size: 1.1rem;">Conheça os desenvolvedores por trás desta galeria Bizarra!</p>
+        
+        <div class="equipe-membro">
+            <!-- Você pode adicionar uma imagem aqui se desejar -->
+            <div class="membro-info">
+                <h3 class="membro-nome">Marcella Ívina</h3>
+                <p class="membro-curso">Aluna do Curso Técnico Integrado em Informática - 5º Semestre</p>
+                <p>Entusiasta de design e desenvolvimento front-end, com foco em criar experiências de usuário envolventes e visualmente atraentes.</p>
+                <div class="membro-habilidades">
+                    <h4>Principais Habilidades:</h4>
+                    <ul>
+                        <li>Apresentações Pitch Impactantes</li>
+                        <li>Design Visual (Canva)</li>
+                        <li>Front-end Web (HTML, CSS, JavaScript)</li>
+                        <li>Frameworks/Bibliotecas (Node.js, React)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="equipe-membro">
+            <!-- Você pode adicionar uma imagem aqui se desejar -->
+            <div class="membro-info">
+                <h3 class="membro-nome">Israel Alves</h3>
+                <p class="membro-curso">Aluno do Curso Técnico Integrado em Informática - 5º Semestre</p>
+                <p>Apaixonado por programação, lógica e inteligência artificial, com experiência em diversas áreas da computação, desde sistemas embarcados até análise de dados.</p>
+                <div class="membro-habilidades">
+                    <h4>Principais Habilidades:</h4>
+                    <ul>
+                        <li>Sistemas Embarcados</li>
+                        <li>Monitoria (Introdução à Programação, POO)</li>
+                        <li>Data Science (Pandas, NumPy, Matplotlib)</li>
+                        <li>Inteligência Artificial & Machine Learning (LLMs)</li>
+                        <li>Machine Learning Clássico (Scikit-learn)</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+</body>
+</html>

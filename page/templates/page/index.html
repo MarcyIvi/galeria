@@ -1,0 +1,514 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Galeria de JoJo</title>
+    <link rel="stylesheet" href="{% static 'css/style.css' %}">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600;700&family=Bebas+Neue&display=swap" rel="stylesheet">
+    <style>
+        body {
+            background-color: #63465A;
+            margin: 0;
+            padding: 0;
+            font-family: 'Poppins', sans-serif;
+            position: relative;
+            color: #fff;
+        }
+        
+        header {
+            background-color: #4A3343;
+            color: white;
+            padding: 18px 0;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.4);
+            position: relative;
+            z-index: 100;
+            border-bottom: 3px solid #E0BBE4;
+        }
+        
+        .header-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 0 20px;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo img {
+            height: 80px;
+            width: auto;
+            filter: drop-shadow(2px 2px 4px rgba(0, 0, 0, 0.5));
+            transition: transform 0.3s ease;
+        }
+        
+        .logo img:hover {
+            transform: scale(1.05);
+        }
+        
+        .logo-text {
+            margin-left: 15px;
+            font-size: 1.8rem;
+            font-weight: bold;
+            font-family: 'Bebas Neue', cursive;
+            color: #E0BBE4;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+            letter-spacing: 2px;
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            margin: 0;
+            padding: 0;
+        }
+        
+        nav ul li {
+            margin: 0 15px;
+        }
+        
+        nav ul li a {
+            color: white;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1.1rem;
+            padding: 8px 15px;
+            border-radius: 5px;
+            transition: all 0.3s ease;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+        
+        nav ul li a:hover,
+        nav ul li a.active {
+            background-color: #E0BBE4;
+            color: #4A3343;
+            box-shadow: 0 0 10px rgba(224, 187, 228, 0.5);
+            transform: translateY(-2px);
+        }
+        
+        .page-title {
+            text-align: center;
+            margin: 40px 0;
+            color: #E0BBE4;
+            font-size: 2.8rem;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+            font-family: 'Bebas Neue', cursive;
+            letter-spacing: 3px;
+        }
+
+        .galeria-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            padding: 20px;
+        }
+        .galeria-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 10px;
+            box-shadow: 0 4px 8px rgba(0,0,0,0.2);
+            transition: all 0.3s ease;
+            cursor: pointer;
+            height: 350px;
+            background-color: rgba(255, 255, 255, 0.1);
+            animation: fadeIn 0.5s ease-in-out;
+        }
+        .galeria-item:hover {
+            transform: scale(1.05) translateY(-5px);
+            box-shadow: 0 12px 20px rgba(0,0,0,0.3);
+            background-color: rgba(255, 255, 255, 0.15);
+        }
+        .galeria-item img {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            display: block;
+            background-color: rgba(0, 0, 0, 0.05);
+            transition: all 0.3s ease;
+            animation: pulse 2s infinite ease-in-out;
+        }
+        .galeria-item:hover img {
+            opacity: 0.9;
+            transform: scale(1.1);
+        }
+        .galeria-item .overlay {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: rgba(0,0,0,0.7);
+            color: white;
+            padding: 10px;
+            transform: translateY(100%);
+            transition: transform 0.4s cubic-bezier(0.25, 0.8, 0.25, 1);
+        }
+        .galeria-item:hover .overlay {
+            transform: translateY(0);
+        }
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.8);
+            z-index: 1000;
+            backdrop-filter: blur(5px);
+            -webkit-backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+            overflow-y: auto;
+            padding: 20px;
+        }
+        .modal-content {
+            position: relative;
+            max-width: 95%;
+            max-height: 90vh;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-start;
+            background: rgba(74, 51, 67, 0.95);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 0 30px rgba(0,0,0,0.5);
+            overflow-y: auto;
+            margin: 20px auto;
+        }
+        .modal-content img {
+            max-width: 100%;
+            max-height: 50vh;
+            width: auto;
+            height: auto;
+            object-fit: contain;
+            border-radius: 10px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.3);
+            margin-bottom: 20px;
+        }
+        .modal-caption {
+            color: white;
+            text-align: center;
+            padding: 10px 20px;
+            font-size: 1.4em;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.5);
+            margin-top: 10px;
+            max-width: 800px;
+            line-height: 1.6;
+            font-weight: bold;
+        }
+        .character-description {
+            color: #E0BBE4;
+            text-align: left;
+            padding: 20px;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-top: 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            max-width: 800px;
+            width: 100%;
+        }
+        .stand-info {
+            color: #E0BBE4;
+            text-align: left;
+            padding: 20px;
+            font-size: 1.1em;
+            line-height: 1.6;
+            margin-top: 10px;
+            background: rgba(0,0,0,0.3);
+            border-radius: 10px;
+            max-width: 800px;
+            width: 100%;
+        }
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 35px;
+            color: #f1f1f1;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+            z-index: 1001;
+        }
+        @media (max-width: 768px) {
+            .header-container {
+                flex-direction: column;
+                padding: 10px;
+            }
+            
+            .logo img {
+                height: 60px;
+            }
+            
+            .logo-text {
+                font-size: 1.5rem;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            nav ul li {
+                margin: 5px;
+            }
+            
+            .page-title {
+                font-size: 2rem;
+                margin: 20px 0;
+            }
+            
+            .galeria-container {
+                grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+                gap: 15px;
+            }
+            .galeria-item {
+                height: 300px;
+            }
+            .modal-content img {
+                max-height: 80vh;
+            }
+        }
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes pulse {
+            0% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.02);
+            }
+            100% {
+                transform: scale(1);
+            }
+        }
+    </style>
+</head>
+<body>    
+    <header>
+        <div class="header-container">
+            <div class="logo">
+                <img src="{% static 'img/jojo.png' %}" alt="JoJo's Bizarre Adventure Logo">
+                <div class="logo-text">JoJo's Bizarre Gallery</div>
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="{% url 'index' %}" class="active">Home</a></li>
+                    <li><a href="{% url 'sobre_equipe' %}">Sobre</a></li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <h1 class="page-title">Galeria de Personagens</h1>
+    
+    <div class="galeria-container">
+        <div class="galeria-item" onclick="openModal(this)">
+            <img src="{% static 'img/jotaro.jpg' %}" alt="Jotaro">
+            <div class="overlay">Jotaro Kujo</div>
+        </div>
+        <div class="galeria-item" onclick="openModal(this)">
+            <img src="{% static 'img/johnny.jpg' %}" alt="Johnny">
+            <div class="overlay">Johnny Joestar</div>
+        </div>
+        <div class="galeria-item" onclick="openModal(this)">
+            <img src="{% static 'img/josuke.jpg' %}" alt="Josuke">
+            <div class="overlay">Josuke Higashikata</div>
+        </div>
+        <div class="galeria-item" onclick="openModal(this)">
+            <img src="{% static 'img/giorno.jpg' %}" alt="Giorno">
+            <div class="overlay">Giorno Giovanna</div>
+        </div>
+        <div class="galeria-item" onclick="openModal(this)">
+            <img src="{% static 'img/jolyne.jpg' %}" alt="Jolyne">
+            <div class="overlay">Jolyne Cujoh</div>
+        </div>
+        <div class="galeria-item" onclick="openModal(this)">
+            <img src="{% static 'img/jodio.jpg' %}" alt="Jodio">
+            <div class="overlay">Jodio Joestar</div>
+        </div>
+        <div class="galeria-item" onclick="openModal(this)">
+            <img src="{% static 'img/bruno.jpg' %}" alt="Bruno">
+            <div class="overlay">Bruno Bucciarati</div>
+        </div>
+        <div class="galeria-item" onclick="openModal(this)">
+            <img src="{% static 'img/kira.jpg' %}" alt="Kira">
+            <div class="overlay">Yoshikage Kira</div>
+        </div>
+        <div class="galeria-item" onclick="openModal(this)">
+            <img src="{% static 'img/weather.jpg' %}" alt="Weather">
+            <div class="overlay">Weather Report</div>
+        </div>
+        <div class="galeria-item" onclick="openModal(this)">
+            <img src="{% static 'img/rohan.jpg' %}" alt="Rohan">
+            <div class="overlay">Rohan Kishibe</div>
+        </div>
+        <div class="galeria-item" onclick="openModal(this)">
+            <img src="{% static 'img/abbacchio.jpg' %}" alt="Abbacchio">
+            <div class="overlay">Leone Abbacchio</div>
+        </div>
+        <div class="galeria-item" onclick="openModal(this)">
+            <img src="{% static 'img/anastacio.jpg' %}" alt="Anastacio">
+            <div class="overlay">Anastacio</div>
+        </div>
+        <div class="galeria-item" onclick="openModal(this)">
+            <img src="{% static 'img/narancia.jpg' %}" alt="Narancia">
+            <div class="overlay">Narancia Ghirga</div>
+        </div>
+        <div class="galeria-item" onclick="openModal(this)">
+            <img src="{% static 'img/fugo.jpg' %}" alt="Fugo">
+            <div class="overlay">Pannacotta Fugo</div>
+        </div>
+        <div class="galeria-item" onclick="openModal(this)">
+            <img src="{% static 'img/polnareff.jpg' %}" alt="Polnareff">
+            <div class="overlay">Jean Pierre Polnareff</div>
+        </div>
+        <div class="galeria-item" onclick="openModal(this)">
+            <img src="{% static 'img/gyro.jpg' %}" alt="Gyro">
+            <div class="overlay">Gyro Zeppeli</div>
+        </div>
+    </div>
+
+    <div id="imageModal" class="modal" onclick="closeModal()">
+        <span class="close-modal">&times;</span>
+        <div class="modal-content">
+            <img id="modalImage" src="" alt="">
+            <div class="modal-caption" id="modalCaption"></div>
+            <div class="character-description" id="characterDescription"></div>
+            <div class="stand-info" id="standInfo"></div>
+        </div>
+    </div>
+
+    <script>
+        const characterData = {
+            'Jotaro Kujo': {
+                description: 'Protagonista de "Stardust Crusaders", Jotaro é um estudante japonês que embarca em uma jornada ao Egito para salvar sua mãe, Holly, da influência maligna de DIO. Conhecido por sua personalidade reservada e comportamento estoico, ele é neto de Joseph Joestar.',
+                stand: 'Star Platinum – Um Stand de curto alcance com força e velocidade excepcionais, capaz de realizar ataques precisos e rápidos. Posteriormente, desenvolve a habilidade de parar o tempo por breves momentos.'
+            },
+            'Johnny Joestar': {
+                description: 'Protagonista de "Steel Ball Run", Johnny é um ex-jóquei prodígio que ficou paraplégico após um acidente. Participa da corrida Steel Ball Run para encontrar uma cura para sua condição e busca redenção pessoal.',
+                stand: 'Tusk – Stand que evolui por diferentes "Ato(s)", começando com a habilidade de disparar unhas giratórias e, em estágios avançados, manipular dimensões e a rotação infinita.'
+            },
+            'Josuke Higashikata': {
+                description: 'Protagonista de "Diamond is Unbreakable", Josuke é um estudante do ensino médio em Morioh, filho ilegítimo de Joseph Joestar. Ele protege sua cidade natal de ameaças sobrenaturais com sua personalidade amigável e senso de justiça.',
+                stand: 'Crazy Diamond – Stand de curto alcance que pode restaurar objetos ou seres vivos ao seu estado original ou anterior, permitindo curar ferimentos ou reparar itens quebrados.'
+            },
+            'Giorno Giovanna': {
+                description: 'Protagonista de "Vento Aureo", Giorno é filho de DIO e aspira a se tornar o chefe da gangue Passione para transformar a organização em uma força do bem. Determinado e carismático, ele busca alcançar seu objetivo com inteligência estratégica.',
+                stand: 'Gold Experience – Stand que pode dar vida a objetos inanimados, transformando-os em organismos vivos. Evolui para Gold Experience Requiem, que possui a habilidade de reverter ações e vontades a um estado de "zero", anulando efetivamente ataques e intenções adversárias.'
+            },
+            'Jolyne Cujoh': {
+                description: 'Protagonista de "Stone Ocean", Jolyne é filha de Jotaro Kujo. Ela é injustamente presa na prisão Green Dolphin Street e luta para sobreviver e limpar seu nome, enquanto desvenda uma conspiração relacionada a DIO.',
+                stand: 'Stone Free – Stand que permite a Jolyne transformar seu corpo em fios, concedendo-lhe flexibilidade e alcance estendidos, além de criar construções complexas com os fios.'
+            },
+            'Jodio Joestar': {
+                description: 'Protagonista de "The JOJOLands", Jodio é um jovem que vive no Havaí e busca alcançar riqueza e sucesso. Sua história explora suas ambições e desafios em um ambiente tropical.',
+                stand: 'Informações sobre o Stand de Jodio ainda não foram completamente reveladas, pois "The JOJOLands" é uma parte recente da série.'
+            },
+            'Bruno Bucciarati': {
+                description: 'Líder de uma equipe dentro da gangue Passione em "Vento Aureo", Bucciarati é inicialmente um antagonista, mas posteriormente se alia a Giorno. Ele é conhecido por seu forte senso de justiça e lealdade aos seus companheiros.',
+                stand: 'Sticky Fingers – Stand de curto alcance que cria zíperes em qualquer superfície, permitindo abrir e fechar espaços, desmontar objetos ou pessoas e até mesmo viajar através dos zíperes.'
+            },
+            'Yoshikage Kira': {
+                description: 'Antagonista principal de "Diamond is Unbreakable", Kira é um serial killer que busca uma vida tranquila enquanto satisfaz seus impulsos homicidas. Ele mantém um perfil discreto para evitar ser capturado.',
+                stand: 'Killer Queen – Stand que transforma qualquer objeto que toca em uma bomba, podendo detoná-lo remotamente. Possui sub-habilidades como Sheer Heart Attack, uma bomba autônoma que persegue fontes de calor, e Bites the Dust, que cria loops temporais para proteger a identidade de Kira.'
+            },
+            'Weather Report': {
+                description: 'Aliado em "Stone Ocean", Weather é inicialmente apresentado como um homem amnésico que auxilia Jolyne em sua missão. Posteriormente, descobre-se que ele é irmão gêmeo do antagonista Enrico Pucci.',
+                stand: 'Weather Report – Stand que controla o clima, permitindo manipular condições atmosféricas como chuva, vento e trovões. Em sua forma evoluída, pode criar fenômenos mais complexos, como a produção de gás venenoso.'
+            },
+            'Rohan Kishibe': {
+                description: 'Mangaká renomado e personagem recorrente em "Diamond is Unbreakable", Rohan é obcecado por autenticidade e busca inspiração direta da vida real para suas obras. Embora egocêntrico, ele possui um senso de moralidade peculiar.',
+                stand: 'Heaven\'s Door – Stand que permite transformar pessoas em livros, revelando suas memórias e conhecimentos. Rohan pode escrever ou editar informações nesses "livros", influenciando comportamentos ou apagando memórias.'
+            },
+            'Leone Abbacchio': {
+                description: 'Membro da equipe de Bucciarati em "Vento Aureo", Abbacchio é um ex-policial que se juntou à Passione após perder a fé no sistema de justiça. Ele é cínico e desconfiado, mas leal aos seus companheiros.',
+                stand: 'Moody Blues – Stand que pode reproduzir eventos passados, recriando ações de pessoas em um determinado local e momento, funcionando como uma espécie de "videocassete" humano.'
+            },
+            'Anastacio': {
+                description: 'Aliado em "Stone Ocean", Anasui é um prisioneiro na Green Dolphin Street Prison que se apaixona por Jolyne Cujoh e decide protegê-la a todo custo. Ele possui uma personalidade obsessiva e é conhecido por sua aparência andrógina.',
+                stand: 'Diver Down – Stand que permite a Anasui inserir-se fisicamente em objetos ou pessoas, remodelando suas estruturas internas para atacar ou defender, criando armadilhas ou reparando danos.'
+            },
+            'Narancia Ghirga': {
+                description: 'Membro da equipe de Bucciarati em "Vento Aureo", Narancia é um jovem impulsivo e leal, com um passado difícil nas ruas. Apesar de sua aparência juvenil, ele é um combatente feroz e dedicado aos seus companheiros.',
+                stand: 'Aerosmith – Stand em forma de pequeno avião de combate que detecta dióxido de carbono para localizar inimigos, equipado com metralhadoras e bombas, permitindo ataques aéreos precisos.'
+            },
+            'Pannacotta Fugo': {
+                description: 'Inicialmente membro da equipe de Bucciarati em "Vento Aureo", Fugo é um jovem prodígio com inteligência excepcional, mas com um temperamento explosivo. Ele possui um forte senso de lealdade, mas eventualmente se separa do grupo devido a conflitos internos.',
+                stand: 'Purple Haze – Stand de curto alcance que expele cápsulas contendo um vírus mortal, capaz de decompor rapidamente qualquer organismo vivo em seu alcance. O vírus é altamente contagioso e letal, tornando Purple Haze uma arma perigosa e difícil de controlar.'
+            },
+            'Jean Pierre Polnareff': {
+                description: 'Aliado em "Stardust Crusaders", Polnareff é um espadachim francês que busca vingança pela morte de sua irmã. Ele é conhecido por seu senso de honra e personalidade extrovertida, frequentemente servindo como alívio cômico, mas também demonstrando grande coragem.',
+                stand: 'Silver Chariot – Stand de alta velocidade e precisão, armado com uma rapieira. Pode remover sua armadura para aumentar sua agilidade, embora isso reduza sua defesa. Silver Chariot é capaz de realizar ataques rápidos e precisos, refletindo a habilidade de esgrima de Polnareff.'
+            },
+            'Gyro Zeppeli': {
+                description: 'Deuteragonista em "Steel Ball Run", Gyro é um executor da nação de Nápoles que participa da corrida Steel Ball Run para obter anistia para um jovem condenado. Ele é carismático, habilidoso e possui um forte senso de justiça, tornando-se mentor e amigo próximo de Johnny Joestar.',
+                stand: 'Gyro utiliza a técnica do Spin com suas Bolas de Aço, aplicando rotações precisas para diversos efeitos, como ataque, defesa e até mesmo propriedades curativas. Quando atinge o ápice do Spin, manifesta o Stand Ball Breaker, que incorpora a energia do Spin para penetrar defesas e causar danos significativos.'
+            }
+        };
+
+        function openModal(element) {
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const modalCaption = document.getElementById('modalCaption');
+            const characterDescription = document.getElementById('characterDescription');
+            const standInfo = document.getElementById('standInfo');
+            const img = element.querySelector('img');
+            const caption = element.querySelector('.overlay').textContent;
+
+            modal.style.display = "flex";
+            modalImg.src = img.src;
+            modalCaption.textContent = caption;
+
+            if (characterData[caption]) {
+                characterDescription.textContent = characterData[caption].description;
+                standInfo.textContent = characterData[caption].stand;
+                characterDescription.style.display = 'block';
+                standInfo.style.display = 'block';
+            } else {
+                characterDescription.style.display = 'none';
+                standInfo.style.display = 'none';
+            }
+
+            document.body.style.overflow = 'hidden';
+        }
+
+        function closeModal() {
+            const modal = document.getElementById('imageModal');
+            modal.style.display = "none";
+            document.body.style.overflow = 'auto';
+        }
+
+        // Fechar modal ao pressionar ESC
+        document.addEventListener('keydown', function(event) {
+            if (event.key === "Escape") {
+                closeModal();
+            }
+        });
+
+        // Prevenir que o clique na imagem feche o modal
+        document.querySelector('.modal-content').addEventListener('click', function(event) {
+            event.stopPropagation();
+        });
+    </script>
+</body>
+</html>
