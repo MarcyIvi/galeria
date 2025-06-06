@@ -8,3 +8,11 @@ class Personagem(models.Model):
 
     def __str__(self):
         return self.nome
+
+class Imagem(models.Model):
+    path = models.CharField(max_length = 200)
+
+    titulo = models.CharField(max_length = 200)
+    descricao = models.TextField(max_length = 500)
+
+
